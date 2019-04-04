@@ -20,7 +20,7 @@ public class TestKartenstapel extends TestCase {
 		assertFalse(myStapel1.empty());
 		assertEquals(52, myStapel1.getKartenAnzahl());
 	}
-//	
+	
 //	public void testKonstruktorSpielInt() {
 //		Kartenstapel myStapel1 = new Kartenstapel(4);
 //		assertFalse(myStapel1.empty());

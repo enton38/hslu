@@ -1,6 +1,5 @@
 package de.hs_lu.o2s.ueb.ue2.cardgames;
 
-
 public class Kartenstapel {
 
 	/**
@@ -70,14 +69,16 @@ public class Kartenstapel {
 	 */
 	public Spielkarte pop() {
 		// ein um 1 kleineres Array anlegen
+		if (this.empty()) {
+			System.out.println("Kartenstapel leer");
+			return null;
+		}
 		Spielkarte[] kartenNeu = new Spielkarte[kartenA.length - 1];
-
 		Spielkarte letzteA = kartenA[kartenA.length - 1];
 
 		// ins neue Array kopieren bis auf die letzte Karte
 		System.arraycopy(kartenA, 0, kartenNeu, 0, kartenA.length - 1);
-		
-		kartenA=kartenNeu;
+		kartenA = kartenNeu;
 		return letzteA;
 
 	}
@@ -114,10 +115,21 @@ public class Kartenstapel {
 	 * @param
 	 */
 	public void addKartenspiel(Kartenspiel kartenspiel) {
+		Spielkarte [] kartenNeu;
+		int stapelgroesse = this.kartenA.length + kartenspiel.getKartenAnzahl();
+		kartenNeu = new Spielkarte [stapelgroesse];
+		
+		System.arraycopy(this.kartenA, 0, kartenNeu, 0, this.kartenA.length);
+		Kartenstapel s = new Kartenstapel(kartenspiel);
+		
+		System.arraycopy(s.kartenA, 0, kartenNeu, this.kartenA.length, s.kartenA.length);
+		
+		this.kartenA = kartenNeu;
 		
 		
-
 	}
+	
+	
 
 	/**
 	 * Einen weiteren Stapel auf den Stapel legen
@@ -126,6 +138,16 @@ public class Kartenstapel {
 	 */
 	public void addKartenstapel(Kartenstapel kartenstapel) {
 
+		int laenge = this.getKartenAnzahl()+kartenstapel.getKartenAnzahl();
+		Spielkarte[] kartenNeu = new Spielkarte[laenge];
+		
+		
+		System.arraycopy(this.kartenA, 0, kartenNeu, 0, this.kartenA.length);
+		System.arraycopy(kartenstapel.kartenA, 0, kartenNeu, this.kartenA.length, kartenstapel.getKartenAnzahl());
+		
+		this.kartenA = kartenNeu;
+		
+		
 	}
 
 	/**
@@ -158,8 +180,18 @@ public class Kartenstapel {
 	 * @return
 	 */
 	public Spielkarte last() {
+		if (this.empty()) {
+			System.out.println("Kartenstapel leer");
+			return null;
+		}
+		Spielkarte[] kartenNeu = new Spielkarte[kartenA.length - 1];
 
-		return null;
+		Spielkarte untersteKarte = kartenA[0];
+
+		System.arraycopy(kartenA, 1, kartenNeu, 0, kartenA.length - 1);
+
+		return untersteKarte;
+
 	}
 
 	/**
@@ -174,23 +206,18 @@ public class Kartenstapel {
 		int karte = (int) (kartenA.length * random);
 		// Auslesen und zurückgeben der zufälligen Karte
 		Spielkarte[] kartenNeu = new Spielkarte[kartenA.length - 1];
-		
-		for(int i=0;i<kartenNeu.length;i++) {
-			int zaehler = 0;
-			
-			if(zaehler==karte) {
-				zaehler++;
-				kartenNeu[i]=kartenA[zaehler];
-			}else {
-				kartenNeu[i]=kartenA[zaehler];
+		for (int i = 0; i < kartenNeu.length; i++) {
+			int counter = 0;
+			if (counter == karte) {
+				counter++;
+				kartenNeu[i] = kartenA[counter];
+
+			} else {
+				kartenNeu[i] = kartenA[counter];
 			}
-			zaehler++;
-			
+			counter++;
+
 		}
-		
-		
-//		System.arraycopy(kartenA, 0, kartenNeu, 0, karte - 1);
-//		System.arraycopy(kartenA, karte, kartenNeu, karte - 1, kartenA.length - 1);
 		Spielkarte kartenReturn = new Spielkarte();
 		kartenReturn = kartenA[karte];
 		kartenA = kartenNeu;
@@ -202,8 +229,8 @@ public class Kartenstapel {
 	 * alle Karten im Kartenstapel zurückgeben
 	 */
 	public String toString() {
-		String myString = "Kartensstapel mit " + this.getKartenAnzahl() + " Karten, Punktwert " + this.getPunktwert()
-				+ "  und folgenden Karten:\n";
+		String myString = "Kartenstapel mit " + this.getKartenAnzahl() + " Karten, Punktwert " + this.getPunktwert()
+				+ " und folgenden Karten:\n";
 
 		for (int f = 0; f < kartenA.length - 1; f++) {
 			myString += kartenA[f].toStringKurz() + ",\n";
